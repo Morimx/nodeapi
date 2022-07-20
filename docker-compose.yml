@@ -1,0 +1,13 @@
+services:
+
+  Dmysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    volumes:
+      - ./DB:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: JavaNS234
+
