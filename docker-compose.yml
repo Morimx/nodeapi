@@ -1,13 +1,17 @@
 services:
 
-  Dmysql:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
+  MSSQL:
+    image: mcr.microsoft.com/mssql/server:2019-latest
     restart: unless-stopped
     ports:
-      - 3306:3306
+      - 1433:1433
     volumes:
-      - ./DB:/var/lib/mysql
+      - ./data:/var/opt/mssql/data
+      - ./log:/var/opt/mssql/log
+      - ./secrets:/var/opt/mssql/secrets
     environment:
-      MYSQL_ROOT_PASSWORD: JavaNS234
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=JavaNS234
+
+
 
