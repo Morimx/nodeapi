@@ -1,49 +1,69 @@
-let connection = require("./dbconfig");
-const sql = require("mysql");
+let config = require("./dbconfig"); // archivo config de conexion
+let sql = require("mssql"); // paquete mssql
 
-function getCategorias() {
-  return new Promise(function (resolve, reject) {
-    let query_str = "SELECT * FROM TM_CATEGORIA";
-
-    connection.query(query_str, function (err, rows) {
-      if (err) {
-      return reject(err);
-      }
-      resolve(rows);
-    });
-  });
+async function getCategorias() {
+  try {
+    let pool = await sql.connect(config);
+    let categorias = await pool.request().query("select * from TM_CATEGORIA");
+    sql.close();
+    return categorias.recordset;
+  } catch {
+    error;
+  }
+  console.log(error);
 }
 
-function getCategoriasxID(cat_id) {
-  return new Promise(function (resolve, reject) {
-    var query_str = sql.format("SELECT * FROM TM_CATEGORIA WHERE CAT_ID=?", [
-      cat_id,
-    ]);
-    connection.query(query_str, function (err, rows) {
-      if (err) {
-        return reject(err);
-      }
-      resolve(rows);
-    });
-  });
+async function getCategoriasxID(id) {
+  try {
+    let pool = await sql.connect(config);
+    let categorias = await pool
+      .request()
+      .query("select * from TM_CATEGORIA where cat_id = " + id);
+    sql.close();
+    return categorias.recordset;
+  } catch {
+    error;
+  }
+  console.log(error);
 }
 
-
-function createCategoria(clase) {
-con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-  //Insert a record in the "customers" table:
-  var sql = "INSERT INTO customers (name, address) VALUES ('Company Inc', 'Highway 37')";
-  con.query(sql, function (err, result) {
-    if (err) throw err;
-    console.log("1 record inserted");
-  });
-});
+async function insertCategoria(classCat) {
+  try {
+    let pool = await sql.connect(config);
+    let insertcate = await pool
+      .request()
+      .input("cat_id", sql.Int, classCat.cat_id)
+      .input("cat_nom", sql.VarChar, classCat.cat_nom)
+      .input("cat_obs", sql.VarChar, classCat.cat_obs)
+      .execute("SP_CATEGORIA");
+    sql.close();
+    return insertcate.recordset;
+  } catch {
+    error;
+  }
+  console.log(error);
 }
 
+async function updateCategoria(classCat) {
+  try {
+    let pool = await sql.connect(config);
+    let updatecate = await pool
+      .request()
+      .input("cat_id", sql.Int, classCat.cat_id)
+      .input("cat_nom", sql.VarChar, classCat.cat_nom)
+      .input("cat_obs", sql.VarChar, classCat.cat_obs)
+      .execute("SP_UP_CATEGORIA");
+    sql.close();
+    return updatecate.recordset;
+  } catch {
+    error;
+  }
+  console.log(error);
+}
 
 module.exports = {
   getCategorias: getCategorias,
   getCategoriasxID: getCategoriasxID,
+  insertCategoria: insertCategoria,
+  updateCategoria: updateCategoria,
 };
