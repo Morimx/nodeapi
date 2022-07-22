@@ -11,7 +11,7 @@ services:
       - ./secrets:/var/opt/mssql/secrets
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=JavaNS234
+      - SA_PASSWORD=Poringa234!
 
 
 
