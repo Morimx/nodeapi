@@ -128,7 +128,7 @@ router.route("/categoria/guardar").post((request, response) => {
  *               cat_nom: "Categoria 1"
  *               cat_obs: "Categoria 1"
  *     responses:
- *        '200':
+ *         '200':
  *         description: Categoria actualizada
  *         content:
  *          application/json:
